@@ -51,9 +51,8 @@ jobs:
       - setup_remote_docker
       - docker/check
       - run: docker build -t $IMAGE_NAME
-      -snyk/scan:
+      - snyk/scan:
           docker-image-nmae: $IMAGE_NAME
-
 
 workflows:
   simple_workflow:
