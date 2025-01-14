@@ -4,6 +4,7 @@ orbs:
   node: circleci/node@5.0.1
   heroku: circleci/heroku@2.0.0
   docker: circleci/docker@2.1.4
+  snyk: snyk/snyk@1.5.0
 
 jobs:
   build:
@@ -40,6 +41,19 @@ jobs:
             heroku stack:set container -a jianxun-su-devops
             heroku container:push web -a jianxun-su-devops
             heroku container:release web -a jianxun-su-devops
+  scan:
+    docker:
+      - image: cimg/node:16.10
+    environment:
+      IMAGE_NAME: jianxunbak/education-space
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - run: docker build -t $IMAGE_NAME
+      -snyk/scan:
+          docker-image-nmae: $IMAGE_NAME
+
 
 workflows:
   simple_workflow:
@@ -47,7 +61,10 @@ workflows:
       - build
       - test:
           requires:
-            - build
-      - deploy:
+            - scan
+      # - deploy:
+      #     requires:
+      #       - test
+      - scan:
           requires:
-            - test
+            - build
