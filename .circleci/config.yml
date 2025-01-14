@@ -73,6 +73,7 @@ workflows:
       - test:
           requires:
             - scan
+            - codescan
       # - deploy:
       #     requires:
       #       - test
