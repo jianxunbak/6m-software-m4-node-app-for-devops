@@ -53,18 +53,18 @@ jobs:
       - run: docker build -t $IMAGE_NAME .
       - snyk/scan:
           docker-image-name: $IMAGE_NAME
-    codescan:
-      docker:
-        - image: cimg/node:16.10
-      environment:
-        IMAGE_NAME: jianxunbak/education-space
-      steps:
-        - checkout
-        - setup_remote_docker
-        - docker/check
-        - snyk/install
-        - run: |
-            snyk code test
+  codescan:
+    docker:
+      - image: cimg/node:16.10
+    environment:
+      IMAGE_NAME: jianxunbak/education-space
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - snyk/install
+      - run: |
+          snyk code test
 
 workflows:
   simple_workflow:
@@ -79,6 +79,6 @@ workflows:
       - scan:
           requires:
             - build
-       - codescan:
+      - codescan:
           requires:
             - build
